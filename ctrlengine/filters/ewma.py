@@ -1,8 +1,8 @@
 ###############################################################
 
-########################################
-### EXPONENTIAL MOVING AVERAGE CLASS ###
-########################################
+##################################
+### EXPONENTIAL MOVING AVERAGE ###
+##################################
 
 class exponentially_weighted_moving_average:
 	def __init__(self, updateWeight=0.7, prevWeight=0.3, length=20):

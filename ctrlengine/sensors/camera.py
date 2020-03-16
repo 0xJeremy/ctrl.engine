@@ -1,5 +1,11 @@
 from threading import Thread
 
+###############################################################
+
+####################
+### CAMERA CLASS ###
+####################
+
 class camera:
 	PI_CAMERA = 1
 	USB_CAMERA = 2
@@ -50,3 +56,5 @@ class camera:
 
 	def stop(self):
 		self.stopped = True
+
+###############################################################
