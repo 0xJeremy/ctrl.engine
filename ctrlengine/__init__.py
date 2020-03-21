@@ -9,3 +9,6 @@ EWMA = exponentially_weighted_moving_average
 
 from .sensors.camera import camera
 camera = camera
+
+from .tools.xbox import xbox_ctrl
+xbox = xbox_ctrl
