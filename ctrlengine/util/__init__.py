@@ -13,3 +13,6 @@ def rotate(origin, point, angle):
 
 from .logger import logger
 logger = logger
+
+from .reporter import reporter
+reporter = reporter
