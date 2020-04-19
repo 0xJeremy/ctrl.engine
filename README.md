@@ -1,9 +1,12 @@
-# ctrl.engine
+<div align="center">
+  <img src="https://raw.githubusercontent.com/0xJeremy/ctrl.engine/master/graphics/Logo.png">
+</div>
 
 #### A general purpose robotics engine
 
 ## Installation
-Python:
+
+[Python](https://pypi.org/project/ctrl.engine/):
 ```
 pip install ctrl.engine
 ```
@@ -23,4 +26,9 @@ from ctrlengine.sensors import camera
 from ctrlengine.tools import xbox_ctrl
 
 from ctrlengine.util import logger
+
+from ctrlengine.ai import face_detection
+from ctrlengine.ai import image_classificatoin
+from ctrlengine.ai import object_detection
+from ctrlengine.ai import pose_detection
 ```
