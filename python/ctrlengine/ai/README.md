@@ -7,6 +7,7 @@ This submodule provides an interface to do high-level machine vision using Tenso
 - [x] Object Detection (with bounding box and confidence)
 - [x] Image Classiifcation (with confidence)
 - [x] Pose Detection (with vertices and confidence)
+- [x] Image Segmentation
 
 ### Models Available:
 #### Face Detection:  
@@ -28,6 +29,9 @@ This submodule provides an interface to do high-level machine vision using Tenso
 + PoseNet Small  
 + PoseNet Medium  
 + PoseNet Large  
+#### Image Segmentation:  
++ DeepLab V3 Pascal  
++ DeepLab V3 DM05  
 
 ### Future Implementations:
 - [ ] Palm Detection
