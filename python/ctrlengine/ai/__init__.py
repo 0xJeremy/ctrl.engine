@@ -9,3 +9,6 @@ object_detection = object_detection
 
 from post_detection import post_detection
 post_detection = post_detection
+
+from image_segmentation import image_segmentation
+image_segmentation = image_segmentation
