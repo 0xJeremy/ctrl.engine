@@ -39,5 +39,5 @@ cam = cv2.VideoCapture(2)
 ret, frame = cam.read()
 
 start = time.time()
-faces = engine.detect_faces(frame)
+print(engine.detect_faces(frame))
 print("{:.2f} ms".format((time.time()-start)*1000))
