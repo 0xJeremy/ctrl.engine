@@ -34,4 +34,6 @@ from ctrlengine.ai import pose_detection
 
 from ctrlengine.ai.cloud_vision import cloud_vision
 from ctrlengine.ai.text_to_speech import text_to_speech
+
+from ctrlengine.ai.azure_vision import azure_vision
 ```
