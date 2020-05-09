@@ -23,7 +23,7 @@ from ctrlengine.filters import exponentially_weighted_moving_average
 
 from ctrlengine.sensors import camera
 
-from ctrlengine.tools import xbox_ctrl
+from ctrlengine.interface import xbox_ctrl
 
 from ctrlengine.util import logger
 
