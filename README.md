@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/0xJeremy/ctrl.engine/master/graphics/Logo.png">
+  <img src="https://raw.githubusercontent.com/0xJeremy/ctrl.engine/master/misc/graphics/Logo.png">
 </div>
 
 #### A general purpose robotics engine

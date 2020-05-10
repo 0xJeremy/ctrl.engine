@@ -1,14 +1,17 @@
 import cv2
 
 class tracker():
+	# Most Accurate, Slowest: CSRT
+	# Middle of the road: KCF
+	# Fastest: Mosse
 	OPENCV_OBJECT_TRACKERS = {
-		'csrt': cv2.TrackerCSRT_create,
-		'kcf': cv2.TrackerKCF_create,
-		'boosting': cv2.TrackerBoosting_create,
-		'mil': cv2.TrackerMIL_create,
-		'tld': cv2.TrackerTLD_create,
-		'medianflow': cv2.TrackerMedianFlow_create,
-		'mosse': cv2.TrackerMOSSE_create
+		'csrt': cv2.TrackerCSRT_create, # More accurate than KCF, but slightly slower
+		'kcf': cv2.TrackerKCF_create, # Fast, doesn't do well with occlusion
+		'boosting': cv2.TrackerBoosting_create, # Slow, outdated
+		'mil': cv2.TrackerMIL_create, # Better accuraccy than Boosting
+		'tld': cv2.TrackerTLD_create, # Prone to false-positives (do not use)
+		'medianflow': cv2.TrackerMedianFlow_create, # Doesn't do well with fast moving targets
+		'mosse': cv2.TrackerMOSSE_create # *Extremely* fast, less accurate than KCF
 	}
 	def __init__(self, type='kcf'):
 		self.tracker = tracker.OPENCV_OBJECT_TRACKERS[type]()

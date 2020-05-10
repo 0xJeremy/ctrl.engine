@@ -95,42 +95,28 @@
 ### TEST TRACKER ###
 ####################
 
-from imutils.video import VideoStream
-from imutils.video import FPS
-import imutils
-import cv2
 from tracker import tracker
+import cv2
+import time
 
-TRACK_TYPE = 'mosse'
+WINDOW_NAME = 'Frame'
 
-track_obj = tracker(type=TRACK_TYPE)
+track_obj = tracker(type='mosse')
 ref = None
 
 cam = cv2.VideoCapture(2)
-fps = None
 
 while True:
+	start = time.time()
 	ret, frame = cam.read()
-	frame = imutils.resize(frame, width=600)
-	(H, W) = frame.shape[:2]
 
 	if ref is not None:
 		box = track_obj.update(frame)
 		if box is not None:
 			(x, y, w, h) = [int(v) for v in box]
 			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-		fps.update()
-		fps.stop()
-		info = [
-			("Tracker", TRACK_TYPE),
-			("Success", "Yes" if box != None else "No"),
-			("FPS", "{:.2f}".format(fps.fps())),
-		]
-		for (i, (k, v)) in enumerate(info):
-			text = "{}: {}".format(k, v)
-			cv2.putText(frame, text, (10, H - ((i * 20) + 20)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
-	cv2.imshow("Frame", frame)
+	cv2.imshow(WINDOW_NAME, frame)
 	key = cv2.waitKey(10)
 	if key == ord("q"):
 		cam.release()
@@ -138,5 +124,7 @@ while True:
 		break
 
 	elif key == ord("s"):
-		ref = track_obj.init_from_selection("Frame", frame)
-		fps = FPS().start()
+		(x, y, w, h) = track_obj.init_from_selection(WINDOW_NAME, frame)
+		ref = frame[y:y+h, x:x+w]
+		cv2.imshow("Reference", ref)
+	print("{:.2f} ms".format((time.time()-start)*1000))
