@@ -12,3 +12,9 @@ post_detection = post_detection
 
 from image_segmentation import image_segmentation
 image_segmentation = image_segmentation
+
+from haar_cascade import haar_cascade
+haar_cascade = haar_cascade
+
+from tracker import tracker
+tracker = tracker

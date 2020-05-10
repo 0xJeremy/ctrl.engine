@@ -31,7 +31,7 @@ MAPPING = {"leftX":           (3, 9),
 
 class xbox_ctrl:
 
-    def __init__(self,refreshRate=30, timeout=2):
+    def __init__(self, refreshRate=30, timeout=2):
         self.proc = subprocess.Popen(['xboxdrv','--no-uinput','--detach-kernel-driver'], stdout=subprocess.PIPE, bufsize=0)
         self.pipe = self.proc.stdout
 

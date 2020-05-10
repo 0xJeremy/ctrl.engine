@@ -32,6 +32,9 @@ from ctrlengine.ai import image_classificatoin
 from ctrlengine.ai import object_detection
 from ctrlengine.ai import pose_detection
 
+from ctrlengine.ai import haar_cascade
+from ctrlengine.ai import tracker
+
 from ctrlengine.ai.cloud_vision import cloud_vision
 from ctrlengine.ai.text_to_speech import text_to_speech
 
