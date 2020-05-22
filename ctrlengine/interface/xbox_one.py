@@ -1,42 +1,34 @@
 import pygame
-from pygame.locals import *
+from pygame.locals import JOYAXISMOTION, JOYHATMOTION
+from pygame.locals import JOYBUTTONUP, JOYBUTTONDOWN
 from threading import Thread
-import time
 
-"""
-NOTES - pygame events and values
-JOYAXISMOTION
-event.axis			  event.value
-0 - x axis left thumb   (+1 is right, -1 is left)
-1 - y axis left thumb   (+1 is down, -1 is up)
-2 - x axis right thumb  (+1 is right, -1 is left)
-3 - y axis right thumb  (+1 is down, -1 is up)
-4 - right trigger
-5 - left trigger
-JOYBUTTONDOWN | JOYBUTTONUP
-event.button
-A = 0
-B = 1
-X = 2
-Y = 3
-LB = 4
-RB = 5
-BACK = 6
-START = 7
-XBOX = 8
-LEFTTHUMB = 9
-RIGHTTHUMB = 10
-JOYHATMOTION
-event.value
-[0] - horizontal
-[1] - vertival
-[0].0 - middle
-[0].-1 - left
-[0].+1 - right
-[1].0 - middle
-[1].-1 - bottom
-[1].+1 - top
-"""
+### MAPPING
+# Left  Joystick X: 0
+# Left  Joystick Y: 1
+# Right Joystick X: 2
+# Right Joystick Y: 3
+# 
+# Left  Trigger: 4
+# Right Trigger: 5
+#
+# A: 6
+# B: 7
+# X: 8
+# Y: 9
+#
+# Right Bumper: 10
+# Left  Bumper: 11
+#
+# Back: 12
+# Start: 13
+#
+# Left  Joystick Press: 14
+# Right Joystick Press: 15
+#
+# D-Pad: 16
+###
+
 class xbox_one():
 
 	class ctrls():
@@ -54,51 +46,28 @@ class xbox_one():
 		RB = 11
 		BACK = 12
 		START = 13
-		XBOX = 14
-		LEFTTHUMB = 15
-		RIGHTTHUMB = 16
-		DPAD = 17
+		LEFTTHUMB = 14
+		RIGHTTHUMB = 15
+		DPAD = 16
 
-	class PyGameAxis():
-		LTHUMBX = 0
-		LTHUMBY = 1
-		RTHUMBX = 2
-		RTHUMBY = 3
-		RTRIGGER = 4
-		LTRIGGER = 5
-
-	class PyGameButtons():
-		A = 0
-		B = 1
-		X = 2
-		Y = 3
-		LB = 4
-		RB = 5
-		BACK = 6
-		START = 7
-		XBOX = 8
-		LEFTTHUMB = 9
-		RIGHTTHUMB = 10
-
-	AXISCONTROLMAP = {PyGameAxis.LTHUMBX: ctrls.LTHUMBX,
-					  PyGameAxis.LTHUMBY: ctrls.LTHUMBY,
-					  PyGameAxis.RTHUMBX: ctrls.RTHUMBX,
-					  PyGameAxis.RTHUMBY: ctrls.RTHUMBY}
+	AXISCONTROLMAP = {0: ctrls.LTHUMBX,
+					  1: ctrls.LTHUMBY,
+					  3: ctrls.RTHUMBX,
+					  4: ctrls.RTHUMBY}
 	
-	TRIGGERCONTROLMAP = {PyGameAxis.RTRIGGER: ctrls.RTRIGGER,
-						 PyGameAxis.LTRIGGER: ctrls.LTRIGGER}
+	TRIGGERCONTROLMAP = {2: ctrls.RTRIGGER,
+						 5: ctrls.LTRIGGER}
 
-	BUTTONCONTROLMAP = {PyGameButtons.A: ctrls.A,
-						PyGameButtons.B: ctrls.B,
-						PyGameButtons.X: ctrls.X,
-						PyGameButtons.Y: ctrls.Y,
-						PyGameButtons.LB: ctrls.LB,
-						PyGameButtons.RB: ctrls.RB,
-						PyGameButtons.BACK: ctrls.BACK,
-						PyGameButtons.START: ctrls.START,
-						PyGameButtons.XBOX: ctrls.XBOX,
-						PyGameButtons.LEFTTHUMB: ctrls.LEFTTHUMB,
-						PyGameButtons.RIGHTTHUMB: ctrls.RIGHTTHUMB}
+	BUTTONCONTROLMAP = {0: ctrls.A,
+						1: ctrls.B,
+						2: ctrls.X,
+						3: ctrls.Y,
+						4: ctrls.LB,
+						5: ctrls.RB,
+						6: ctrls.BACK,
+						7: ctrls.START,
+						8: ctrls.LEFTTHUMB,
+						9: ctrls.RIGHTTHUMB}
 						
 	def __init__(self, controllerCallBack=None, joystickNo=0, deadzone=0.1, scale=1, invertYAxis=False):		
 		self.controllerCallBack = controllerCallBack
@@ -124,7 +93,6 @@ class xbox_one():
 					 self.ctrls.RB:0,
 					 self.ctrls.BACK:0,
 					 self.ctrls.START:0,
-					 self.ctrls.XBOX:0,
 					 self.ctrls.LEFTTHUMB:0,
 					 self.ctrls.RIGHTTHUMB:0,
 					 self.ctrls.DPAD:(0,0)}
@@ -140,9 +108,9 @@ class xbox_one():
 			for event in pygame.event.get():
 				if event.type == JOYAXISMOTION:
 					if event.axis in self.AXISCONTROLMAP:
-						yAxis = True if (event.axis == self.PyGameAxis.LTHUMBY or event.axis == self.PyGameAxis.RTHUMBY) else False
+						yAxis = True if (event.axis == self.LTHUMBY or event.axis == self.RTHUMBY) else False
 						self.updateControlValue(self.AXISCONTROLMAP[event.axis], self._sortOutAxisValue(event.value, yAxis))
-					if event.axis in self.TRIGGERCONTROLMAP:
+					elif event.axis in self.TRIGGERCONTROLMAP:
 						self.updateControlValue(self.TRIGGERCONTROLMAP[event.axis], self._sortOutTriggerValue(event.value))		
 				elif event.type == JOYHATMOTION:
 					self.updateControlValue(self.ctrls.DPAD, event.value)
@@ -177,7 +145,7 @@ class xbox_one():
 		return value
 
 	def _sortOutTriggerValue(self, value):
-		return max(0,(value + 1) / 2) * self.scale
+		return max(0, (value + 1)/2) * self.scale
 
 	def _sortOutButtonValue(self, eventType):
 		return 1 if eventType == JOYBUTTONDOWN else 0
@@ -227,9 +195,6 @@ class xbox_one():
 
 	@property
 	def START(self): return self._cVs[self.ctrls.START]
-
-	@property
-	def XBOX(self): return self._cVs[self.ctrls.XBOX]
 
 	@property
 	def LEFTTHUMB(self): return self._cVs[self.ctrls.LEFTTHUMB]

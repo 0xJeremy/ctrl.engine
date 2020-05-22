@@ -16,7 +16,6 @@ ctrl.setupControlCallback(ctrl.ctrls.LTHUMBX, leftThumbX)
 ctrl.setupControlCallback(ctrl.ctrls.LTHUMBY, leftThumbY)
 
 try:
-	print("xbox controller running")
 	while True:
 		time.sleep(1)
 
