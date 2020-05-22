@@ -16,7 +16,7 @@ class camera():
 		return self.frame
 
 	def read(self):
-		return self.frame
+		return self.ret, self.frame
 
 	def run(self):
 		while True:

@@ -91,40 +91,42 @@
 
 ###############################################################
 
-####################
-### TEST TRACKER ###
-####################
+#######################
+### TESTING TRACKER ###
+#######################
 
-from tracker import tracker
-import cv2
-import time
+# from tracker import tracker
+# import cv2
+# import time
 
-WINDOW_NAME = 'Frame'
+# WINDOW_NAME = 'Frame'
 
-track_obj = tracker(type='mosse')
-ref = None
+# track_obj = tracker(type='mosse')
+# ref = None
 
-cam = cv2.VideoCapture(2)
+# cam = cv2.VideoCapture(2)
 
-while True:
-	start = time.time()
-	ret, frame = cam.read()
+# while True:
+# 	start = time.time()
+# 	ret, frame = cam.read()
 
-	if ref is not None:
-		box = track_obj.update(frame)
-		if box is not None:
-			(x, y, w, h) = [int(v) for v in box]
-			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+# 	if ref is not None:
+# 		box = track_obj.update(frame)
+# 		if box is not None:
+# 			(x, y, w, h) = [int(v) for v in box]
+# 			cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-	cv2.imshow(WINDOW_NAME, frame)
-	key = cv2.waitKey(10)
-	if key == ord("q"):
-		cam.release()
-		cv2.destroyAllWindows()
-		break
+# 	cv2.imshow(WINDOW_NAME, frame)
+# 	key = cv2.waitKey(10)
+# 	if key == ord("q"):
+# 		cam.release()
+# 		cv2.destroyAllWindows()
+# 		break
 
-	elif key == ord("s"):
-		(x, y, w, h) = track_obj.init_from_selection(WINDOW_NAME, frame)
-		ref = frame[y:y+h, x:x+w]
-		cv2.imshow("Reference", ref)
-	print("{:.2f} ms".format((time.time()-start)*1000))
+# 	elif key == ord("s"):
+# 		(x, y, w, h) = track_obj.init_from_selection(WINDOW_NAME, frame)
+# 		ref = frame[y:y+h, x:x+w]
+# 		cv2.imshow("Reference", ref)
+# 	print("{:.2f} ms".format((time.time()-start)*1000))
+
+###############################################################
