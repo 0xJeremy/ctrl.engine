@@ -50,24 +50,24 @@ class xbox_one():
 		RIGHTTHUMB = 15
 		DPAD = 16
 
-	AXISCONTROLMAP = {0: ctrls.LTHUMBX,
-					  1: ctrls.LTHUMBY,
-					  3: ctrls.RTHUMBX,
-					  4: ctrls.RTHUMBY}
+	AXISMAP = {0: ctrls.LTHUMBX,
+			   1: ctrls.LTHUMBY,
+			   3: ctrls.RTHUMBX,
+			   4: ctrls.RTHUMBY}
 	
-	TRIGGERCONTROLMAP = {2: ctrls.RTRIGGER,
-						 5: ctrls.LTRIGGER}
+	TRIGGERMAP = {2: ctrls.RTRIGGER,
+				  5: ctrls.LTRIGGER}
 
-	BUTTONCONTROLMAP = {0: ctrls.A,
-						1: ctrls.B,
-						2: ctrls.X,
-						3: ctrls.Y,
-						4: ctrls.LB,
-						5: ctrls.RB,
-						6: ctrls.BACK,
-						7: ctrls.START,
-						8: ctrls.LEFTTHUMB,
-						9: ctrls.RIGHTTHUMB}
+	BUTTONMAP = {0: ctrls.A,
+				 1: ctrls.B,
+				 2: ctrls.X,
+				 3: ctrls.Y,
+				 4: ctrls.LB,
+				 5: ctrls.RB,
+				 6: ctrls.BACK,
+				 7: ctrls.START,
+				 8: ctrls.LEFTTHUMB,
+				 9: ctrls.RIGHTTHUMB}
 						
 	def __init__(self, controllerCallBack=None, joystickNo=0, deadzone=0.1, scale=1, invertYAxis=False):		
 		self.controllerCallBack = controllerCallBack
@@ -78,24 +78,8 @@ class xbox_one():
 		self.controlCallbacks = {}
 
 		self.stopped = False
-
-		self._cVs = {self.ctrls.LTHUMBX:0,
-					 self.ctrls.LTHUMBY:0,
-					 self.ctrls.RTHUMBX:0,
-					 self.ctrls.RTHUMBY:0,
-					 self.ctrls.RTRIGGER:0,
-					 self.ctrls.LTRIGGER:0,
-					 self.ctrls.A:0,
-					 self.ctrls.B:0,
-					 self.ctrls.X:0,
-					 self.ctrls.Y:0,
-					 self.ctrls.LB:0,
-					 self.ctrls.RB:0,
-					 self.ctrls.BACK:0,
-					 self.ctrls.START:0,
-					 self.ctrls.LEFTTHUMB:0,
-					 self.ctrls.RIGHTTHUMB:0,
-					 self.ctrls.DPAD:(0,0)}
+		self._cVs = {i:0 for i in range(16)}
+		self._cVs[16] = (0, 0)
 
 		pygame.init()
 		pygame.joystick.init()
@@ -107,17 +91,17 @@ class xbox_one():
 		while not self.stopped:
 			for event in pygame.event.get():
 				if event.type == JOYAXISMOTION:
-					if event.axis in self.AXISCONTROLMAP:
+					if event.axis in self.AXISMAP:
 						yAxis = True if (event.axis == self.LTHUMBY or event.axis == self.RTHUMBY) else False
-						self.updateControlValue(self.AXISCONTROLMAP[event.axis], self._sortOutAxisValue(event.value, yAxis))
-					elif event.axis in self.TRIGGERCONTROLMAP:
-						self.updateControlValue(self.TRIGGERCONTROLMAP[event.axis], self._sortOutTriggerValue(event.value))		
+						self.updateControlValue(self.AXISMAP[event.axis], self._sortOutAxisValue(event.value, yAxis))
+					elif event.axis in self.TRIGGERMAP:
+						self.updateControlValue(self.TRIGGERMAP[event.axis], self._sortOutTriggerValue(event.value))		
 				elif event.type == JOYHATMOTION:
 					self.updateControlValue(self.ctrls.DPAD, event.value)
 
 				elif event.type == JOYBUTTONUP or event.type == JOYBUTTONDOWN:
-					if event.button in self.BUTTONCONTROLMAP:
-						self.updateControlValue(self.BUTTONCONTROLMAP[event.button], self._sortOutButtonValue(event.type))
+					if event.button in self.BUTTONMAP:
+						self.updateControlValue(self.BUTTONMAP[event.button], self._sortOutButtonValue(event.type))
 		
 	def stop(self):
 		self.stopped = True
@@ -136,7 +120,7 @@ class xbox_one():
 	def setupControlCallback(self, control, callbackFunction):
 		self.controlCallbacks[control] = callbackFunction
 
-	def _sortOutAxisValue(self, value, yAxis = False):
+	def _sortOutAxisValue(self, value, yAxis=False):
 		if yAxis and self.invertYAxis:
 			value = value * -1
 		value = value * self.scale

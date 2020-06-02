@@ -1,2 +1,2 @@
 from .camera import camera
-camera = camera
+from .realsense import realsense_camera

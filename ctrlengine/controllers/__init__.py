@@ -1,2 +1,1 @@
-from .pid import PID_ctrl
-PID = PID_ctrl
+from .pid import PID_ctrl as PID
