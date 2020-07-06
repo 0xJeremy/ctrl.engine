@@ -7,32 +7,36 @@ RAW_MAX = 32768.0
 RAW_MIN = 32767.0
 RESPONSE_LENGTH = 140
 
-MAPPING = {"leftX":           (3, 9),
-           "leftY":           (13, 19),
-           "rightX":          (24, 30),
-           "rightY":          (34, 40),
-           "dpadUp":          (45, 46),
-           "dpadDown":        (50, 51),
-           "dpadLeft":        (55, 56),
-           "dpadRight":       (60, 61),
-           "Back":            (68, 69),
-           "Guide":           (76, 77),
-           "Start":           (84, 85),
-           "leftThumbstick":  (90, 91),
-           "rightThumbstick": (95, 96),
-           "A":               (100, 101),
-           "B":               (104, 105),
-           "X":               (108, 109),
-           "Y":               (112, 113),
-           "leftBumper":      (118, 119),
-           "rightBumper":     (123, 124),
-           "leftTrigger":     (129, 132),
-           "rightTrigger":    (136, 139)}
+MAPPING = {
+    "leftX": (3, 9),
+    "leftY": (13, 19),
+    "rightX": (24, 30),
+    "rightY": (34, 40),
+    "dpadUp": (45, 46),
+    "dpadDown": (50, 51),
+    "dpadLeft": (55, 56),
+    "dpadRight": (60, 61),
+    "Back": (68, 69),
+    "Guide": (76, 77),
+    "Start": (84, 85),
+    "leftThumbstick": (90, 91),
+    "rightThumbstick": (95, 96),
+    "A": (100, 101),
+    "B": (104, 105),
+    "X": (108, 109),
+    "Y": (112, 113),
+    "leftBumper": (118, 119),
+    "rightBumper": (123, 124),
+    "leftTrigger": (129, 132),
+    "rightTrigger": (136, 139),
+}
+
 
 class xbox_360:
-
     def __init__(self, refreshRate=30, timeout=2):
-        self.proc = subprocess.Popen(['xboxdrv','--no-uinput','--detach-kernel-driver'], stdout=subprocess.PIPE, bufsize=0)
+        self.proc = subprocess.Popen(
+            ['xboxdrv', '--no-uinput', '--detach-kernel-driver'], stdout=subprocess.PIPE, bufsize=0
+        )
         self.pipe = self.proc.stdout
 
         self.connectStatus = False
@@ -62,7 +66,7 @@ class xbox_360:
     #######################
 
     def _readable(self):
-        readable, writeable, exception = select.select([self.pipe],[],[],0)
+        readable, writeable, exception = select.select([self.pipe], [], [], 0)
         return readable
 
     def _refresh(self):
@@ -106,45 +110,62 @@ class xbox_360:
     def rightY(self, deadzone=DEADZONE, r=True):
         return self._axisScale(self._getValue("rightY", r=r), deadzone)
 
-    def dpadUp(self): return self._getValue("dpadUp")
-        
-    def dpadDown(self): return self._getValue("dpadDown")
-        
-    def dpadLeft(self): return self._getValue("dpadLeft")
-        
-    def dpadRight(self): return self._getValue("dpadRight")
-        
-    def Back(self): return self._getValue("Back")
+    def dpadUp(self):
+        return self._getValue("dpadUp")
 
-    def Guide(self): return self._getValue("Guide")
+    def dpadDown(self):
+        return self._getValue("dpadDown")
 
-    def Start(self): return self._getValue("Start")
+    def dpadLeft(self):
+        return self._getValue("dpadLeft")
 
-    def leftThumbstick(self): return self._getValue("leftThumbstick")
+    def dpadRight(self):
+        return self._getValue("dpadRight")
 
-    def rightThumbstick(self): return self._getValue("rightThumbstick")
+    def Back(self):
+        return self._getValue("Back")
 
-    def A(self): return self._getValue("A")
-        
-    def B(self): return self._getValue("B")
+    def Guide(self):
+        return self._getValue("Guide")
 
-    def X(self): return self._getValue("X")
+    def Start(self):
+        return self._getValue("Start")
 
-    def Y(self): return self._getValue("Y")
+    def leftThumbstick(self):
+        return self._getValue("leftThumbstick")
 
-    def leftBumper(self): return self._getValue("leftBumper")
+    def rightThumbstick(self):
+        return self._getValue("rightThumbstick")
 
-    def rightBumper(self): return self._getValue("rightBumper")
+    def A(self):
+        return self._getValue("A")
 
-    def leftTrigger(self): return self._getValue("leftTrigger")
-        
-    def rightTrigger(self): return self._getValue("rightTrigger")
+    def B(self):
+        return self._getValue("B")
+
+    def X(self):
+        return self._getValue("X")
+
+    def Y(self):
+        return self._getValue("Y")
+
+    def leftBumper(self):
+        return self._getValue("leftBumper")
+
+    def rightBumper(self):
+        return self._getValue("rightBumper")
+
+    def leftTrigger(self):
+        return self._getValue("leftTrigger")
+
+    def rightTrigger(self):
+        return self._getValue("rightTrigger")
 
     def leftStick(self, deadzone=DEADZONE):
-        return (self.leftX(deadzone),self.leftY(deadzone, r=False))
+        return (self.leftX(deadzone), self.leftY(deadzone, r=False))
 
     def rightStick(self, deadzone=DEADZONE):
-        return (self.rightX(deadzone),self.rightY(deadzone, r=False))
+        return (self.rightX(deadzone), self.rightY(deadzone, r=False))
 
     #########################
     ### Utility Functions ###
@@ -154,4 +175,5 @@ class xbox_360:
         self._refresh()
         return self.connectStatus
 
-    def close(self): self.proc.kill()
+    def close(self):
+        self.proc.kill()

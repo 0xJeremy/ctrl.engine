@@ -1,7 +1,8 @@
 from google.cloud import vision
 import cv2
 
-class cloud_vision():
+
+class cloud_vision:
     def __init__(self):
         self.client = vision.ImageAnnotatorClient()
         self.response = None
@@ -39,7 +40,7 @@ class cloud_vision():
 
     def __encode_image(self, image):
         ret, frame = cv2.imencode('.jpg', image)
-        if(ret != True):
+        if ret != True:
             raise RuntimeException("Problem Encoding Image to .jpg")
         return vision.types.Image(content=frame.tostring())
 

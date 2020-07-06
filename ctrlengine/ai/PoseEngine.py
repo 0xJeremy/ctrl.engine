@@ -10,24 +10,25 @@ import numpy as np
 ###################
 
 KEYPOINTS = (
-  'nose',
-  'left eye',
-  'right eye',
-  'left ear',
-  'right ear',
-  'left shoulder',
-  'right shoulder',
-  'left elbow',
-  'right elbow',
-  'left wrist',
-  'right wrist',
-  'left hip',
-  'right hip',
-  'left knee',
-  'right knee',
-  'left ankle',
-  'right ankle'
+    'nose',
+    'left eye',
+    'right eye',
+    'left ear',
+    'right ear',
+    'left shoulder',
+    'right shoulder',
+    'left elbow',
+    'right elbow',
+    'left wrist',
+    'right wrist',
+    'left hip',
+    'right hip',
+    'left knee',
+    'right knee',
+    'left ankle',
+    'right ankle',
 )
+
 
 class Keypoint:
     __slots__ = ['k', 'yx', 'score']
@@ -68,12 +69,13 @@ class PoseEngine(BasicEngine):
         self._mirror = mirror
 
         self._input_tensor_shape = self.get_input_tensor_shape()
-        if (self._input_tensor_shape.size != 4 or
-                self._input_tensor_shape[3] != 3 or
-                self._input_tensor_shape[0] != 1):
+        if self._input_tensor_shape.size != 4 or self._input_tensor_shape[3] != 3 or self._input_tensor_shape[0] != 1:
             raise ValueError(
-                ('Image model should have input shape [1, height, width, 3]!'
-                 ' This model has {}.'.format(self._input_tensor_shape)))
+                (
+                    'Image model should have input shape [1, height, width, 3]!'
+                    ' This model has {}.'.format(self._input_tensor_shape)
+                )
+            )
         _, self.image_height, self.image_width, self.image_depth = self.get_input_tensor_shape()
 
         # The API returns all the output tensors flattened and concatenated. We
@@ -95,11 +97,13 @@ class PoseEngine(BasicEngine):
 
         # Extend or crop the input to match the input shape of the network.
         if img.shape[0] < self.image_height or img.shape[1] < self.image_width:
-            img = np.pad(img, [[0, max(0, self.image_height - img.shape[0])],
-                               [0, max(0, self.image_width - img.shape[1])], [0, 0]],
-                         mode='constant')
-        img = img[0:self.image_height, 0:self.image_width]
-        assert (img.shape == tuple(self._input_tensor_shape[1:]))
+            img = np.pad(
+                img,
+                [[0, max(0, self.image_height - img.shape[0])], [0, max(0, self.image_width - img.shape[1])], [0, 0]],
+                mode='constant',
+            )
+        img = img[0 : self.image_height, 0 : self.image_width]
+        assert img.shape == tuple(self._input_tensor_shape[1:])
 
         # Run the inference (API expects the data to be flattened)
         return self.ParseOutput(self.run_inference(img.flatten()))
@@ -107,7 +111,7 @@ class PoseEngine(BasicEngine):
     def ParseOutput(self, output):
         inference_time, output = output
         outputs = []
-        outputs = [output[int(i):int(j)] for i, j in zip(self._output_offsets, self._output_offsets[1:])]
+        outputs = [output[int(i) : int(j)] for i, j in zip(self._output_offsets, self._output_offsets[1:])]
 
         keypoints = outputs[0].reshape(-1, len(KEYPOINTS), 2)
         keypoint_scores = outputs[1].reshape(-1, len(KEYPOINTS))
@@ -121,9 +125,9 @@ class PoseEngine(BasicEngine):
         for pose_i in range(nposes):
             keypoint_dict = {}
             for point_i, point in enumerate(keypoints[pose_i]):
-                keypoint = Keypoint(KEYPOINTS[point_i], point,
-                                    keypoint_scores[pose_i, point_i])
-                if self._mirror: keypoint.yx[1] = self.image_width - keypoint.yx[1]
+                keypoint = Keypoint(KEYPOINTS[point_i], point, keypoint_scores[pose_i, point_i])
+                if self._mirror:
+                    keypoint.yx[1] = self.image_width - keypoint.yx[1]
                 keypoint_dict[KEYPOINTS[point_i]] = keypoint
             poses.append(Pose(keypoint_dict, pose_scores[pose_i]))
 
